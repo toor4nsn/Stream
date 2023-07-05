@@ -1,0 +1,40 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: nokia
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/web?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+
+  redis:
+    host: localhost
+#    host: 47.114.52.113
+#    password: heimaleyou
+    port: 6379
+
+logging:
+  level:
+    com.example.mapper: debug
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+#app:
+#  id: SampleApp
+#apollo:
+#  meta: http://localhost:8080
+#  bootstrap:
+#    enabled: true
+#    namespaces: application
+
+
+
+car:
+  vtp:
+    config: '{"carOwner":{"url":"https://hcz-static.pingan.com.cn/carCard/index.html","text":"a"},"verify":{"url":"https://hcz-static.pingan.com.cn/carPlatform/identity/index.html","text":"b"},"illegalFrameNo":{"url":"https://hcz-static.pingan.com.cn/carCard/index.html","text":"c"}}'
+susan.test.map: '{"name":"苏三","age":"18"}'
