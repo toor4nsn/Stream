@@ -1,11 +1,18 @@
 ### Java template
 # Compiled class file
 *.class
+
 .idea/
-target
+target/
+
 # Log file
 *.log
-
+log/
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
 # BlueJ files
 *.ctxt
 
