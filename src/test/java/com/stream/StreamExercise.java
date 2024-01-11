@@ -1,5 +1,6 @@
 package com.stream;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -87,11 +88,21 @@ public class StreamExercise {
         System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(setMap));
 
         System.out.println("===========================");
-        // 进阶版版
+        // 按照address分组，提取age
         Map<String, List<Integer>> result2 = list.stream().collect(Collectors.groupingBy(
                 Person::getAddress,
                 Collectors.mapping(Person::getAge, Collectors.toList())));
         System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(result2));
+
+        //按照age分组并排序(逆序)，提取name
+        TreeMap<Integer, List<String>> result3 = list.stream().collect(
+                Collectors.groupingBy(Person::getAge,
+                ()-> new TreeMap<>(Comparator.reverseOrder()),
+                Collectors.mapping(Person::getName, Collectors.toList()))
+        );
+        System.out.println(JSON.toJSONString(result3));
+
+
         System.out.println("===========================");
         Map<Boolean, List<Person>> partitionCollect = list.stream()
                 .collect(Collectors.partitioningBy(person -> person.getAge() > 18 && "杭州".equals(person.getAddress())));

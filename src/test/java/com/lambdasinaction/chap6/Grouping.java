@@ -2,6 +2,7 @@ package com.lambdasinaction.chap6;
 
 
 import com.alibaba.fastjson2.JSON;
+import com.google.errorprone.annotations.Var;
 import org.apache.logging.log4j.message.Message;
 import org.junit.jupiter.api.Test;
 
@@ -128,9 +129,21 @@ public class Grouping {
 
         Map<Dish.Type, Dish> collect5 =
                 menu.stream().collect(Collectors.toMap(Dish::getType, Function.identity(), BinaryOperator.maxBy(Comparator.comparingInt(Dish::getCalories)),TreeMap::new));
-        System.out.println(collect5);
+        System.out.println( "collect5:"+collect5);
+
+        //查找每个子组中热量最高的Dish
+        Map<Dish.Type, Dish> collect8 = menu.stream().collect(groupingBy(Dish::getType, collectingAndThen(maxBy(Comparator.comparingInt(Dish::getCalories)), Optional::get)));
+        System.out.println( "collect8:"+collect8);
 
 
+        //按照每个子组总热量从高低的顺序进行分组
+        Map<Dish.Type, List<Dish>> collect9 = menu.stream().collect(groupingBy(Dish::getType,
+                collectingAndThen(toList(), item -> item.stream().sorted(Comparator.comparingInt(Dish::getCalories).reversed()).collect(toList()))
+        ));
+        System.out.println( "collect9:"+collect9);
+
+
+        //按type进行分组，然后统计每个分组得总数量
         Map<Dish.Type, Integer> collect6 = menu.stream().collect(groupingBy(Dish::getType, summingInt(Dish::getCalories)));
         System.out.println(collect6);
 

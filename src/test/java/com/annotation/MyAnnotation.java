@@ -10,4 +10,6 @@ import java.lang.annotation.Target;
 public @interface MyAnnotation {
     String name();
     int age();
+
+    String[] names();
 }

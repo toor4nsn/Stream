@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  * @author bravo
  * @date 2020-03-19 17:55
  */
+/*
 public class MockStream {
 
     public static void main(String[] args) throws JsonProcessingException {
@@ -46,12 +47,14 @@ public class MockStream {
     }
 
 
-    /**
+    */
+/**
      * 按JSON格式输出
      *
      * @param obj
      * @throws JsonProcessingException
-     */
+     *//*
+
     private static void prettyPrint(Object obj) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         String s = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
@@ -77,11 +80,13 @@ class MyList<T> {
         return list.add(t);
     }
 
-    /**
+    */
+/**
      * 给MyList传递具体的判断规则，然后MyList把内部现有符合判断（true）的元素集返回
      * @param predicate
      * @return
-     */
+     *//*
+
     public MyList<T> filter(Predicate<T> predicate){
         MyList<T> filteredList = new MyList<>();
 
@@ -95,13 +100,15 @@ class MyList<T> {
         return filteredList;
     }
 
-    /**
+    */
+/**
      * 把MyList中的List<T>转为List<R>
      *
      * @param mapper
      * @param <R>
      * @return
-     */
+     *//*
+
     public <R> MyList<R> map(Function<T, R> mapper) {
         MyList<R> mappedList = new MyList<>();
 
@@ -114,37 +121,45 @@ class MyList<T> {
 
 }
 
+*/
 /**
  * 定义一个Predicate接口，名字无所谓
  *
  * @param <T>
- */
+ *//*
+
 @FunctionalInterface
 interface Predicate<T> {
-    /**
+    */
+/**
      * 定义了一个test()方法，传入任意对象，返回true or false，具体判断逻辑由子类实现
      *
      * @param t
      * @return
-     */
+     *//*
+
     boolean test(T t);
 }
 
 
+*/
 /**
  * 定义一个Function接口，名字无所谓
  *
  * @param <E>
  * @param <R>
- */
+ *//*
+
 
 @FunctionalInterface
 interface Function<E, R> {
-    /**
+    */
+/**
      * 定义一个apply()方法，接收一个E返回一个R。也就是把E映射成R
      *
      * @param e
      * @return
-     */
+     *//*
+
     R apply(E e);
-}
+}*/

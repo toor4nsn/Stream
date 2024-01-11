@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.App;
 import com.example.mapper.StudentMapper;
 import com.example.po.Student;
+import com.example.service.AService;
+import com.example.service.BService;
 import com.example.util.RedisHandleService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +38,7 @@ public class MybatisplusTest {
     public void selectTest(){
 
         LambdaQueryWrapper<Student> wrapper = new LambdaQueryWrapper<>();
-        String name="toor4nsn";
-
+        String name="Huawei";
         wrapper.eq(Student::getName,name);
         List<Student> list = studentMapper.selectList(wrapper);
         System.out.println(JSON.toJSONString(list));
@@ -83,10 +84,10 @@ public class MybatisplusTest {
         System.out.println(row);
     }
     @Autowired
-    private RedisHandleService redisHandleService;
-
+    AService aService;
     @Test
-    public void deleteTest(){
-        redisHandleService.del("toor","nsn");
+    public void transactionalTest(){
+        aService.insertA();
     }
+
 }

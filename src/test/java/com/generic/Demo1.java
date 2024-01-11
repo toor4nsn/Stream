@@ -62,6 +62,19 @@ public class Demo1 {
         System.out.println(list);
     }
 
+
+    @Test
+    public void test02(){
+        List<Number> list = new ArrayList<>();
+        list.add(1);
+        list.add(2L);
+        list.add(new BigDecimal("3.45"));
+        Number number = list.get(2);
+        System.out.println(number);
+        List<? extends Number> numberList = new ArrayList<>();
+
+    }
+
     @Test
     public void testt() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 

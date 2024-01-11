@@ -11,6 +11,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import jdk.nashorn.internal.runtime.JSType;
+import lombok.experimental.var;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.omg.CORBA.portable.IDLEntity;
@@ -20,6 +23,7 @@ import sun.security.provider.MD5;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -39,30 +43,25 @@ public class demo {
         System.out.println(com1.compare(1, 2));
         Comparator<Integer> com2 = Integer::compare;
         System.out.println(com2.compare(2, 1));
-        System.out.println(com2.compare(1,1));
+        System.out.println(com2.compare(1, 1));
 
-        BiPredicate<String,String> bp= String::equals;
+        BiPredicate<String, String> bp = String::equals;
 
-        Supplier<Student> sup= Student::new;
-        System.out.println(sup.get());
-        Function<Integer,Student> fuc= Student::new;
-        Student apply = fuc.apply(1);
-        System.out.println(apply);
     }
 
     @Test
-    public void test2(){
+    public void test2() {
         List<Integer> list = Stream.of(1, 2, 3, 4, 5).collect(Collectors.toList());
         Optional<Integer> first = list.stream().map(x -> x * x).filter(x -> x % 3 == 0).findFirst();
         first.ifPresent(System.out::println);
     }
 
     @Test
-    public void test3(){
+    public void test3() {
         Integer reduce = Stream.of(1, 2, 3, 4, 5).reduce(1, (a, b) -> a * b);
         System.out.println(reduce);
         Optional<Integer> max = Stream.of(1, 2, 3, 4, 5).reduce(Integer::max);
-        max.ifPresent(x-> System.out.println(x));
+        max.ifPresent(x -> System.out.println(x));
 
         Long aLong = Stream.of(1, 2, 3, 4, 5).collect(Collectors.reducing(0L, e -> 1L, Long::sum));
         System.out.println(aLong);
@@ -70,58 +69,57 @@ public class demo {
     }
 
     @Test
-    public void cal(){
+    public void cal() {
         ArrayList<Integer> list1 = Lists.newArrayList(1, 2, 3, 4);
         ArrayList<String> list2 = Lists.newArrayList("a", "b", "c", "d");
 
         JSONObject j1 = new JSONObject();
-        j1.put("list1",list1);
+        j1.put("list1", list1);
         JSONObject j2 = new JSONObject();
-        j2.put("list2",list2);
+        j2.put("list2", list2);
         JSONObject combined = new JSONObject();
 
         combined.put("list1", j1.getJSONArray("list1"));
         combined.put("list2", j2.getJSONArray("list2"));
-
 
         System.out.println(combined);
 
         System.out.println(j1);
         System.out.println(JSON.toJSONString(list1));
 
-
     }
 
     @Test
     public void t1() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         HashMap<String, String> m1 = new HashMap<>();
-        m1.put("a","aa");
-        m1.put("b","bb");
-        m1.put("c","cc");
-        m1.put("d","dd");
+        m1.put("a", "aa");
+        m1.put("b", "bb");
+        m1.put("c", "cc");
+        m1.put("d", "dd");
         HashMap<String, String> m2 = new HashMap<>();
         for (Map.Entry<String, String> entry : m1.entrySet()) {
-            m2.put(entry.getValue(),entry.getKey());
+            m2.put(entry.getValue(), entry.getKey());
         }
         System.out.println(m2);
 
-        Map<String, String> collect = m1.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+        Map<String, String> collect = m1.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
         System.out.println(collect);
 
         ArrayList<Integer> list = new ArrayList<>();
         Class<? extends List> aClass = list.getClass();
         Method add = aClass.getDeclaredMethod("add", Object.class);
-        add.invoke(list,"Nokia");
+        add.invoke(list, "Nokia");
         System.out.println(list);
     }
 
     @Test
-    public void t2(){
+    public void t2() {
         String appId = "op58848b404206a14";
         String appSecret = "ZJfRe8WAvKp7L50sajQQf7blmY48SNkJ";
         String eventId = "156";
-        String openid="123456";
-        String identity="123456";
+        String openid = "123456";
+        String identity = "123456";
 
         Map<String, String> params = new HashMap<>();
         params.put("event_id", eventId);
@@ -139,7 +137,7 @@ public class demo {
     }
 
     @Test
-    public void t3(){
+    public void t3() {
         ProductInfo info1 = new ProductInfo();
         info1.setProductId("01");
         info1.setProductCode("MP001");
@@ -162,7 +160,6 @@ public class demo {
         product.setId("1");
         product.setMediaSource("MTLY:001");
         product.setInfoList(productInfos);
-
 
         ProductInfo info6 = new ProductInfo();
         info6.setProductId("06");
@@ -193,13 +190,16 @@ public class demo {
         Map<String, List<String>> map = list.stream().collect(Collectors.toMap(Product::getMediaSource,
                 item -> item.getInfoList().stream().map(ProductInfo::getProductCode).collect(Collectors.toList())));
 
-/*        HashMap<String, List<String>> hashMap=new HashMap<>();
-        for (Product item : list) {
-            String mediaSource = item.getMediaSource();
-            List<String> productCodeList = item.getInfoList().stream().map(ProductInfo::getProductCode).collect(Collectors.toList());
-            hashMap.put(mediaSource,productCodeList);
-        }*/
-
+        /*
+         * HashMap<String, List<String>> hashMap=new HashMap<>();
+         * for (Product item : list) {
+         * String mediaSource = item.getMediaSource();
+         * List<String> productCodeList =
+         * item.getInfoList().stream().map(ProductInfo::getProductCode).collect(
+         * Collectors.toList());
+         * hashMap.put(mediaSource,productCodeList);
+         * }
+         */
 
         System.out.println(map);
 
@@ -208,49 +208,53 @@ public class demo {
         HashMap<String, List<String>> resultMap = Maps.newHashMap();
         for (Map.Entry<String, List<Product>> entry : collect.entrySet()) {
             String key = entry.getKey();
-            //method1
+            // method1
             List<String> productCodeList = entry.getValue()
                     .stream()
                     .map(Product::getInfoList)
                     .flatMap(item -> item.stream().map(ProductInfo::getProductCode))
                     .collect(Collectors.toList());
-            //method2
-            List<String> productCodeList2 = entry.getValue().stream().map(item -> item.getInfoList().stream().map(ProductInfo::getProductCode).collect(Collectors.toList())).flatMap(Collection::stream).collect(Collectors.toList());
-            resultMap.put(key,productCodeList);
+            // method2
+            List<String> productCodeList2 = entry.getValue().stream().map(
+                    item -> item.getInfoList().stream().map(ProductInfo::getProductCode).collect(Collectors.toList()))
+                    .flatMap(Collection::stream).collect(Collectors.toList());
+            resultMap.put(key, productCodeList);
         }
         System.out.println(resultMap);
     }
 
     @Test
-    public void gsonTest(){
+    public void gsonTest() {
         Gson gson = new Gson();
         String jsonArray = "[\"Android\",\"Java\",\"PHP\"]";
         String[] strings = gson.fromJson(jsonArray, String[].class);
-        List<String> stringList = gson.fromJson(jsonArray, new TypeToken<List<String>>() {}.getType());
+        List<String> stringList = gson.fromJson(jsonArray, new TypeToken<List<String>>() {
+        }.getType());
         System.out.println(new Gson().toJson(stringList));
     }
 
     @Test
-    public void fastJsonTest(){
-        String a="[\"Android\",\"Java\",\"PHP\"]";
+    public void fastJsonTest() {
+        String a = "[\"Android\",\"Java\",\"PHP\"]";
         List<String> list = JSON.parseArray(a, String.class);
         System.out.println(list);
     }
+
     @Test
-    public void hashMapTest(){
+    public void hashMapTest() {
         HashMap<String, String> map = new HashMap<>();
-        map.put("a","toor");
+        map.put("a", "toor");
         String b = map.compute("b", (k, v) -> "result");
-        System.out.println("b:"+ b);
+        System.out.println("b:" + b);
         System.out.println(map);
 
         String s = map.putIfAbsent("b", "newResult");
-        System.out.println("s:"+s);
+        System.out.println("s:" + s);
         System.out.println(map);
     }
 
     @Test
-    public void bigDecimalTest(){
+    public void bigDecimalTest() {
         Product p1 = new Product();
         p1.setPrice(new BigDecimal("1.123"));
         p1.setId("1");
@@ -267,75 +271,12 @@ public class demo {
     }
 
     @Test
-    public void testStringTable(){
-        String s1 = "javaEEhadoop";
-        String s2 = "javaEE";//变量
-        String s3 = s2 + "hadoop";
-        System.out.println(s1 == s3);//false
-        final String s4 = "javaEE";//常量
-        String s5 = s4 + "hadoop";
-        System.out.println(s1 == s5);//true
-
-    }
-
-    @Test
-    public void testString2(){
-        String s = new String("1");
-        s.intern();//调用此方法之前，字符串常量池中已经存在了"1"
-        String s2 = "1";
-        System.out.println(s == s2);
-
-        String s3 = new String("1") + new String("1");//pos_1  new String("11")
-        s3.intern();
-
-
-        String s4 = "11";//s4变量记录的地址：使用的是上一行代码代码执行时，在常量池中生成的"11"的地址
-        System.out.println(s3 == s4);
-    }
-    @Test
-    public void testString3(){
-        //执行完下一行代码以后，字符串常量池中，是否存在"11"呢？答案：不存在！！
-        String s3 = new String("1") + new String("1");//new String("11")
-        //在字符串常量池中生成对象"11"，代码顺序换一下，实打实的在字符串常量池里有一个"11"对象
-        String s4 = "11";
-        String s5 = s3.intern();
-
-        // s3 是堆中的 "ab" ，s4 是字符串常量池中的 "ab"
-        System.out.println(s3 == s4);//false
-
-        // s5 是从字符串常量池中取回来的引用，当然和 s4 相等
-        System.out.println(s5 == s4);//true
-    }
-    @Test
-    public void testString4(){
-//        String x = "ab";
-        String s = new String("a") + new String("b");//new String("ab")
-        //在上一行代码执行完以后，字符串常量池中并没有"ab"
-		/*
-		1、jdk6中：在字符串常量池（此时在永久代）中创建一个字符串"ab"
-        2、jdk8中：字符串常量池（此时在堆中）中没有创建字符串"ab",而是创建一个引用，指向new String("ab")，		  将此引用返回
-        3、详解看上面
-		*/
-        String s2 = s.intern();
-
-        System.out.println(s2 == "ab");//jdk6:true  jdk8:true
-        System.out.println(s == "ab");//jdk6:false  jdk8:true
-    }
-    @Test
-    public void testString5(){
-//        String s1=new String("ab");
-        String s1= new String("a") + new String("b");
-        s1.intern();
-        String s2="ab";
-        System.out.println(s1==s2);
-    }
-    @Test
-    public void testList(){
+    public void testList() {
         ArrayList<Integer> list = Lists.newArrayList(1, 2, 3, 4, 5, 6);
         Optional<Integer> max = list.stream().max(Comparator.comparingInt(Integer::intValue));
-        if (max.isPresent()){
+        if (max.isPresent()) {
             System.out.println(max.get());
-        }else {
+        } else {
             System.out.println("null");
         }
         list.replaceAll(item -> item * item);
@@ -343,7 +284,7 @@ public class demo {
     }
 
     @Test
-    public void testMAP(){
+    public void testMAP() {
         HashMap<String, String> map = Maps.newHashMap();
         map.put("a", "5");
         map.put("b", "4");
@@ -359,15 +300,66 @@ public class demo {
         String result = map.getOrDefault("f", "defaultValue");
         System.out.println(result);
 
-        //computeIfAbsent——如果指定的键没有对应的值（没有该键或者该键对应的值是空），那么使用该键计算新的值，并将其添加到Map中
-        //computeIfAbsent的一个应用场景是缓存信息
+        // computeIfAbsent——如果指定的键没有对应的值（没有该键或者该键对应的值是空），那么使用该键计算新的值，并将其添加到Map中
+        // computeIfAbsent的一个应用场景是缓存信息
         HashMap<String, List<String>> map2 = new HashMap<>();
         boolean add = map2.computeIfAbsent("movie", value -> new ArrayList<>()).add("new item");
         System.out.println(add);
         System.out.println(map2);
 
-        map.entrySet().removeIf(item-> Integer.parseInt(item.getValue()) < 3);
+        map.entrySet().removeIf(item -> Integer.parseInt(item.getValue()) < 3);
         System.out.println(map);
     }
 
+    @Test
+    public void test() {
+        // 按照字符串长度分组，然后把分组后的字符串转换成大写
+        List<String> names = Arrays.asList("John", "Jane", "Tom", "Emily");
+        Map<Integer, List<String>> namesByLength = names.stream()
+                .collect(Collectors.groupingBy(
+                        String::length,
+                        Collectors.mapping(
+                                String::toUpperCase,
+                                Collectors.toList())));
+        System.out.println(namesByLength);
+
+    }
+
+    @Test
+    public void collectingAndThenTest() {
+        // Test case 1: Collecting and then converting to uppercase
+        List<String> input1 = Arrays.asList("apple", "banana", "cherry");
+        List<String> result1 = input1.stream()
+                .collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+                    return list.stream().map(String::toUpperCase).collect(Collectors.toList());
+                }));
+        System.out.println(result1); // Output: [APPLE, BANANA, CHERRY]
+
+        // Test case 2: Collecting and then calculating the sum
+        List<Integer> input2 = Arrays.asList(1, 2, 3, 4, 5);
+        int result2 = input2.stream()
+                .collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+                    return list.stream().mapToInt(Integer::intValue).sum();
+                }));
+        System.out.println(result2); // Output: 15
+    }
+
+    @Test
+    public void flatMapTest() {
+        List<List<String>> nestedList = Arrays.asList(
+                Arrays.asList("apple", "banana"),
+                Arrays.asList("cherry", "date"),
+                Arrays.asList("fig", "grape"));
+        List<String> flatList = nestedList.stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+        System.out.println(flatList); // Output: [apple, banana, cherry, date, fig, grape]
+    }
+
+    @Test
+    public void jcisjcjlsjg(){
+        String s = "123456789";
+        String substring = s.substring(0, 3);
+        System.out.println(substring);
+    }
 }

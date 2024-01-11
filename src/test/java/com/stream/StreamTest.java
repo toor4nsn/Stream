@@ -1,14 +1,19 @@
 package com.stream;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 public class StreamTest {
 
@@ -56,6 +61,20 @@ public class StreamTest {
 
 
 
+    }
+
+    /**
+     * <a href="https://blog.wangqi.love/articles/Java/guava%20Ordering%E6%80%BB%E7%BB%93.html">例子</a>
+     */
+    @Test
+    public void specificOrderTest() {
+        ArrayList<Integer> var1 = Lists.newArrayList(17, 21, 19, 18, 31, 23, 45);
+        ImmutableList<Person> immutableList = Ordering.explicit(var1).onResultOf(Person::getAge).immutableSortedCopy(list);
+        System.out.println(immutableList);
+
+        Ordering<Person> order = Ordering.explicit(var1).onResultOf(Person::getAge);
+        list.sort(order);
+        System.out.println(list);
     }
     
     @Data

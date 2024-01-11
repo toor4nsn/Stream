@@ -1,18 +1,17 @@
 package com.stream;
 
 
-import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
+
+import com.alibaba.fastjson.JSON;
+import com.example.po.Item;
 import com.google.common.collect.Lists;
-import javafx.scene.media.VideoTrack;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,6 +46,7 @@ public class demo5 {
         String s1 = JSON.toJSONString(collect1);
         System.out.println(s1);
         System.out.println("----------------------");
+
         Map<String, List<String>> collect2 = list.stream().collect(Collectors.groupingBy(Student::getDepartment, Collectors.collectingAndThen(Collectors.mapping(Student::getName, Collectors.toList()), Collections::unmodifiableList)));
         System.out.println(JSON.toJSONString(collect2));
         Set<Map.Entry<String, List<String>>> entries = collect1.entrySet();
@@ -58,134 +58,45 @@ public class demo5 {
         System.out.println(JSON.toJSONString(collect1));
     }
 
+
     @Test
-    public void testDeepCopy() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Student s = new Student();
-        s.setAge(28);
-        s.setName("toor");
-        s.setDepartment("Math");
-        ArrayList<Student> list = Lists.newArrayList(s);
-        ArrayList<Student> copy = ObjectUtil.cloneByStream(list);
+    public void groupingByTest(){
+        List<Item> list = Arrays.asList(
+                new Item("apple", 10, new BigDecimal("9.99")),
+                new Item("banana", 20, new BigDecimal("19.99")),
+                new Item("orange", 10, new BigDecimal("9.99")),
+                new Item("orange", 10, new BigDecimal("29.99")),
+                new Item("watermelon", 10, new BigDecimal("29.99")),
+                new Item("papaya", 20, new BigDecimal("9.99")),
+                new Item("apple", 10, new BigDecimal("9.99")),
+                new Item("banana", 10, new BigDecimal("19.99")),
+                new Item("apple", 20, new BigDecimal("9.99"))
+        );
+        //name进行分组，然后统计每个分组得总数量
+        Map<String, Integer> var1 = list.stream().collect(Collectors.groupingBy(Item::getName, Collectors.summingInt(Item::getQty)));
+        System.out.println(var1);
+        //price进行分组，然后提取对应的name
+        Map<BigDecimal, Set<String>> var2 = list.stream().collect(Collectors.groupingBy(Item::getPrice, Collectors.mapping(Item::getName, Collectors.toSet())));
+        System.out.println(var2);
 
-        System.out.println(copy);
+        //price进行分组，对分组后的商品名称按价格进行排序
+        Map<BigDecimal, Set<String>> var3 = list.stream().collect(Collectors.groupingBy(Item::getPrice, TreeMap::new, Collectors.mapping(Item::getName, Collectors.toSet())));
+        System.out.println(var3);
 
-//        System.out.println("9223372036854775807".length());
+        //name进行分组，查找每个子组中 price 最高的
+        Map<String, Item> var4 = list.stream().collect(Collectors.groupingBy(Item::getName,
+                Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparing(Item::getPrice)), Optional::get)));
+        System.out.println(var4);
 
-        Class<?> aClass = Class.forName("com.example.po.Person");
-        Person person = (Person) aClass.newInstance();
+        //name进行分组，分组中按照 qty 排序
+        Map<String, List<Item>> var5 = list.stream().collect(Collectors.groupingBy(Item::getName,
+                Collectors.collectingAndThen(Collectors.toList(), it -> it.stream().sorted(Comparator.comparingInt(Item::getQty)).collect(Collectors.toList()))));
+        System.out.println(JSON.toJSONString(var5));
 
     }
 
-    @Test
-    public void jsonArrayTest(){
-        String input ="{\n" +
-                "    \"message\": \"OK\",\n" +
-                "    \"code\": 0,\n" +
-                "    \"data\": {\n" +
-                "        \"list\": [\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1643827007904776,\n" +
-                "                \"advertiser_name\": \"中国平安保险(集团)股份有限公司-平安车险-04\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1643828239022093,\n" +
-                "                \"advertiser_name\": \"中国平安保险(集团)股份有限公司-平安车险-05\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1671551817051143,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安车险-01-头条搜索\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1686854008579079,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安车险-06-搜索\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1689823491520520,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安车险-07-抖音\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1689825338059783,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安车险-08-抖音\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1689825338525703,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安车险-09-搜索\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1689825338937351,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安车险-10-今日头条\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1700966466635789,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安车险-011-抖音\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1700966467070990,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安车险-012-搜索\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1700966467517448,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安车险-013-抖音\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1700966468042823,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安车险-014-抖音\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1700966468602894,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安新能源车险-015户\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1733603375555598,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安新能源车险-016-抖音\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1733603376547847,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安车险-017-抖音\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1733603377507406,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安车险-018-抖音\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1733603378348040,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安车险-019-抖音\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 1733603379450893,\n" +
-                "                \"advertiser_name\": \"中国平安财产保险股份有限公司-平安车险-020-今日头条\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 3680784748649022,\n" +
-                "                \"advertiser_name\": \"中国平安保险(集团)股份有限公司-平安车险-03-今日头条\"\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"advertiser_id\": 3979851911935667,\n" +
-                "                \"advertiser_name\": \"中国平安保险(集团)股份有限公司-平安车险-02-抖音\"\n" +
-                "            }\n" +
-                "        ]\n" +
-                "    },\n" +
-                "    \"request_id\": \"2022120817005048EA492C5CE6473C977C\"\n" +
-                "}";
-        JSONObject jsonObject = JSONObject.parseObject(input);
-        List<String> collect = jsonObject.getJSONObject("data").getJSONArray("list").stream()
-                .map(item ->JSONObject.parseObject(JSON.toJSONString(item)).getString("advertiser_id")).collect(Collectors.toList());
-
-//        ArrayList<String> res = new ArrayList<>();
-//        JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONArray("list");
-//        for (int i = 0; i < jsonArray.size(); i++) {
-//            String advertiser_id = jsonArray.getJSONObject(i).getString("advertiser_id");
-//            res.add(advertiser_id);
-//        }
-
-        System.out.println(collect);
-    }
 
 
-    @Test
-    public void mytest(){
-        String s = "7074806092097929253";
-        System.out.println(Long.valueOf(s));
-    }
+
     
 }

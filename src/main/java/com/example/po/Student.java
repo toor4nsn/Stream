@@ -1,6 +1,7 @@
 package com.example.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -8,24 +9,27 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @Author Liwei
- * @Date 2021/7/3 15:01
- */
+
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@TableName("student")
+@TableName(value = "student")
 public class Student {
-    @TableId(value = "id", type = IdType.AUTO)
+    /**
+     * PK
+     */
+    @TableId(value = "id", type = IdType.INPUT)
     private Integer id;
+
+    /**
+     * 名字
+     */
+    @TableField(value = "`name`")
     private String name;
+
+    /**
+     * 年龄
+     */
+    @TableField(value = "age")
     private Integer age;
 
-    public Student(Integer id) {
-        this.id = id;
-    }
+
 }
-
-

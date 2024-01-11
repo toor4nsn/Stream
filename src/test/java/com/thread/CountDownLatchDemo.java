@@ -19,7 +19,6 @@ import static java.lang.Thread.sleep;
  * @Date 2022/4/19 0:55
  */
 @Slf4j
-@SpringBootTest(classes = App.class)
 public class CountDownLatchDemo {
     @Test
     public void test(){
@@ -147,50 +146,30 @@ public class CountDownLatchDemo {
 
     }
 
-    @Autowired
-    private RestTemplate restTemplate;
 
     @Test
-    public void testCountDownLatch() throws ExecutionException, InterruptedException {
-        long start = System.currentTimeMillis();
+    public void xjidhe() throws InterruptedException {
+        CountDownLatch countDownLatch = new CountDownLatch(5);
 
-        log.info("begin");
-        ExecutorService service = Executors.newCachedThreadPool();
-        CountDownLatch latch = new CountDownLatch(4);
-        Future<Map<String,Object>> f1 = service.submit(() -> {
-            Map<String, Object> r =
-                    restTemplate.getForObject("http://localhost:8080/order/{1}", Map.class, 1);
-//            latch.countDown();
-            return r;
+        Thread 大乔 = new Thread(countDownLatch::countDown);
+        Thread 兰陵王 = new Thread(countDownLatch::countDown);
+        Thread 安其拉 = new Thread(countDownLatch::countDown);
+        Thread 哪吒 = new Thread(countDownLatch::countDown);
+        Thread 铠 = new Thread(() -> {
+            try {
+                // 稍等，上个卫生间，马上到...
+                Thread.sleep(5500);
+                countDownLatch.countDown();
+            } catch (InterruptedException ignored) {}
         });
-        Future<Map<String, Object>> f2 = service.submit(() -> {
-            Map<String, Object> r =
-                    restTemplate.getForObject("http://localhost:8080/product/{1}", Map.class, 1);
-//            latch.countDown();
-            return r;
-        });
-        Future<Map<String, Object>> f3 = service.submit(() -> {
-            Map<String, Object> r =
-                    restTemplate.getForObject("http://localhost:8080/product/{1}", Map.class, 2);
-//            latch.countDown();
-            return r;
-        });
-        Future<Map<String, Object>> f4 = service.submit(() -> {
-            Map<String, Object> r =
-                    restTemplate.getForObject("http://localhost:8080/logistics/{1}", Map.class, 1);
-//            latch.countDown();
-            return r;
-        });
-//        latch.await();
-        System.out.println(f1.get());
-        System.out.println(f2.get());
-        System.out.println(f3.get());
-        System.out.println(f4.get());
-        long end = System.currentTimeMillis();
-        log.info("cost time:{}",end-start);
-        log.info("执行完毕");
-        service.shutdown();
 
+        大乔.start();
+        兰陵王.start();
+        安其拉.start();
+        哪吒.start();
+        铠.start();
+        countDownLatch.await();
+        System.out.println("所有玩家已经就位！");
     }
 
     @Test

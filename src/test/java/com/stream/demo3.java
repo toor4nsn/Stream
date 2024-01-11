@@ -1,8 +1,10 @@
 package com.stream;
 
+import com.example.po.Person;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,7 +23,7 @@ public class demo3 {
         //demo3.getHealthPerson(uncheckPersonList,person -> 核酸检测(person));
         //demo3.getHealthPerson(uncheckPersonList,person -> CT(person));
     }
-    public static List<Person> getHealthPerson(List<Person> uncheckedPersonList,Predicate<Person> predicate){
+    public static List<Person> getHealthPerson(List<Person> uncheckedPersonList, Predicate<Person> predicate){
         ArrayList<Person> healthyPersonList = new ArrayList<>();
         for (Person person : uncheckedPersonList) {
             if (predicate.test(person)){
