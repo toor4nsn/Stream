@@ -6,15 +6,21 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.App;
+import com.example.entity.Users;
 import com.example.mapper.StudentMapper;
+import com.example.mapper.UsersMapper;
 import com.example.po.Student;
 import com.example.service.AService;
 import com.example.service.BService;
 import com.example.util.RedisHandleService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -88,6 +94,15 @@ public class MybatisplusTest {
     @Test
     public void transactionalTest(){
         aService.insertA();
+    }
+
+    @Autowired
+    UsersMapper usersMapper;
+    @Test
+    public void test1() throws JsonProcessingException {
+        ArrayList<Integer> ids = Lists.newArrayList(5, 6, 7);
+        List<Users> res = usersMapper.selectByUserId(ids);
+        System.out.println(new ObjectMapper().writeValueAsString(res));
     }
 
 }

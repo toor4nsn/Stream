@@ -2,14 +2,17 @@ package com.guava;
 
 import com.example.po.Trader;
 import com.google.common.base.CharMatcher;
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.*;
+import com.stream.StreamTest;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+
 
 /**
  * Guava
@@ -190,4 +193,42 @@ public class GuavaTest {
         Map<String, String> map = Splitter.on(",").withKeyValueSeparator("=").split("xiaoming=11,xiaohong=23");
         System.out.println(map);
     }
+
+    static {
+
+    }
+
+    /**
+     * <a href="https://blog.wangqi.love/articles/Java/guava%20Ordering%E6%80%BB%E7%BB%93.html">例子</a>
+     */
+    @Test
+    public void specificOrderTest() {
+        List<Person> list = new ArrayList<>();
+        list.add(new Person("i", 18, "杭州", 999.9));
+        list.add(new Person("am", 19, "温州", 777.7));
+        list.add(new Person("iron", 21, "杭州", 888.8));
+        list.add(new Person("man", 17, "宁波", 888.8));
+        list.add(new Person("shanghai", 30, "上海", 999.99));
+
+        ArrayList<Integer> var1 = Lists.newArrayList(30, 17);
+//        ImmutableList<Person> immutableList = Ordering.explicit(var1).onResultOf(Person::getAge).immutableSortedCopy(list);
+//        System.out.println(immutableList);
+
+        //Ordering<Person> order = Ordering.explicit(var1).onResultOf(Person::getAge);
+        Ordering<Person> order = Ordering.explicit(var1).onResultOf(Person::getAge);
+        list.sort(order);
+        System.out.println(list);
+
+    }
+
+    @Test
+    public void orderTest(){
+        List<String> myOrder = Arrays.asList("apple", "banana", "cherry");
+        Ordering<String> myOrdering = Ordering.explicit(myOrder);
+        List<String> fruits = Arrays.asList("cherry", "banana", "apple");
+        Collections.sort(fruits, myOrdering);
+        System.out.println(fruits);
+
+    }
+
 }

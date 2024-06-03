@@ -358,8 +358,34 @@ public class demo {
 
     @Test
     public void jcisjcjlsjg(){
-        String s = "123456789";
-        String substring = s.substring(0, 3);
-        System.out.println(substring);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id",1);
+        map.put("name","nokia");
+        ArrayList<HashMap<String, Object>> list = Lists.newArrayList(map);
+        list.sort(Comparator.comparing(item -> (Integer) item.get("id")));
+    }
+    @Test
+    public void xjshcjdixkslc() {
+        List<Student> list = new ArrayList<>();
+        // 添加学生数据
+        list.add(new Student(1, "Student1", 20));
+        list.add(new Student(3, "Student2", 22));
+        list.add(new Student(3, "Student3", 24));
+        // 按照id降序，如果id相同的再按照age降序
+        list.sort(Comparator.comparing(Student::getId).thenComparing(Student::getAge).reversed());
+        // 打印排序后的学生列表
+        System.out.println(list);
+    }
+    @Test
+    public void xjshcjdixkssedsecgseglc() {
+        List<Student> list = new ArrayList<>();
+        // 添加学生数据
+        list.add(new Student(1, "Student1", 20));
+        list.add(new Student(1, "Student2", 22));
+        list.add(new Student(3, "Student3", 24));
+        list.sort(Comparator.comparing(Student::getId,Comparator.reverseOrder()).thenComparing(Student::getAge,Comparator.reverseOrder()));
+        // 打印排序后的学生列表
+        System.out.println(list);
+
     }
 }

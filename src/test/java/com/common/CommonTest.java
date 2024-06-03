@@ -2,22 +2,35 @@ package com.common;
 
 import cn.hutool.Hutool;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.EnumUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.symmetric.AES;
 import com.alibaba.fastjson.JSON;
+import com.example.enums.MemberEnum;
+import com.example.enums.WeekDayEnum;
+import com.example.po.Student;
 import com.example.util.NciUrlUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import javax.sound.midi.Soundbank;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @Author Liwei
@@ -229,5 +242,25 @@ public class CommonTest {
 //        System.out.println(decryptStr);
 
     }
+
+    @Test
+    public void enumTest(){
+        MemberEnum memberEnum = MemberEnum.getEnumByType(1);
+        System.out.println(
+                memberEnum.getType() + "=" + memberEnum.getDesc()
+        );
+        BigDecimal finalPrice = memberEnum.calculateFinalPrice(new BigDecimal("1000"));
+        System.out.println(finalPrice);
+
+        WeekDayEnum weekDayEnum = WeekDayEnum.getEnumByCode2(7);
+        System.out.println(weekDayEnum.getCode() + "=" + weekDayEnum.getDesc());
+
+        WeekDayEnum dayEnum = EnumUtil.getBy(WeekDayEnum::getCode, 1);
+        System.out.println(dayEnum.getCode() + "=" + dayEnum.getDesc());
+
+        WeekDayEnum dayEnum3 = com.example.enums.EnumUtil.getEnum(WeekDayEnum.class, WeekDayEnum::getCode, 3);
+        System.out.println(dayEnum3.getCode() + "=" + dayEnum3.getDesc());
+    }
+
 
 }

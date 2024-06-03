@@ -1,8 +1,12 @@
 package com.example.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.example.config.CaffeineConfig;
 import com.example.dto.ResultDTO;
+import com.example.entity.JsonExample;
+import com.example.entity.JsonExampleVO;
 import com.example.enums.ExceptionCodeEnum;
+import com.example.mapper.JsonExampleMapper;
 import com.example.mapper.StudentMapper;
 import com.example.po.Result;
 import com.example.po.Student;
@@ -148,5 +152,14 @@ public class DemoController {
         return ResultDTO.success(list);
     }
 
+    @Autowired
+    JsonExampleMapper jsonExampleMapper;
+    @GetMapping("test/json")
+    public ResultDTO getJsonTest(){
+        JsonExample jsonDemo = jsonExampleMapper.selectById(1);
+        String data = jsonDemo.getData();
+        JsonExampleVO jsonExampleVO = JSON.parseObject(data, JsonExampleVO.class);
+        return ResultDTO.success(jsonExampleVO);
+    }
 
 }

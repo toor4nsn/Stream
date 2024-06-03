@@ -27,7 +27,7 @@ public class EncryptDecrypt {
         String decryptStr = aes.decryptStr(encryptBase64);
         System.out.println(decryptStr);
 
-        String decrypt2 = AESUtil.decrypt(encryptBase64);
+        String decrypt2 = com.encrypt.AESUtil.decrypt(encryptBase64);
         System.out.println(decrypt2);
     }
 
