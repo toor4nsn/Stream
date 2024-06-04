@@ -9,10 +9,12 @@ import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.symmetric.AES;
 import com.alibaba.fastjson.JSON;
+import com.example.entity.Person;
 import com.example.enums.MemberEnum;
 import com.example.enums.WeekDayEnum;
 import com.example.po.Student;
 import com.example.util.NciUrlUtils;
+import com.example.util.ThreadLocalMap;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
@@ -262,5 +264,20 @@ public class CommonTest {
         System.out.println(dayEnum3.getCode() + "=" + dayEnum3.getDesc());
     }
 
+@Test
+    public void testThreadLocal() {
+    ThreadLocalMap.put("mainKey", new Person("i", 18, "杭州", 999.9));
+
+    new Thread(()->{
+        ThreadLocalMap.put("threadKey", new Student(2,"thread",2));
+
+        System.out.println("get main value in thread:" + ThreadLocalMap.get("mainKey"));
+        System.out.println("get thread value in thread:" + ThreadLocalMap.get("threadKey"));
+    }).start();
+
+    System.out.println("get thread value in main:" + ThreadLocalMap.get("threadKey"));
+    System.out.println("get main value in main:" + ThreadLocalMap.get("mainKey"));
+
+}
 
 }

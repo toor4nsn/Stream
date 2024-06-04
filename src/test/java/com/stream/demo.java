@@ -6,6 +6,7 @@ import cn.hutool.crypto.SecureUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.example.po.*;
+import com.example.util.ConvertUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -15,6 +16,7 @@ import jdk.nashorn.internal.runtime.JSType;
 import lombok.experimental.var;
 
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.jupiter.api.Test;
 import org.omg.CORBA.portable.IDLEntity;
 import org.springframework.beans.BeanUtils;
@@ -31,7 +33,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+import com.example.entity.Person;
 /**
  * @Author Liwei
  * @Date 2021/7/3 13:41
@@ -386,6 +388,22 @@ public class demo {
         list.sort(Comparator.comparing(Student::getId,Comparator.reverseOrder()).thenComparing(Student::getAge,Comparator.reverseOrder()));
         // 打印排序后的学生列表
         System.out.println(list);
+
+    }
+
+    @Test
+    public void ConvertUtilTest(){
+        ArrayList<Integer> numList = Lists.newArrayList(1, 2, 3, 4, 5, 5);
+        List<Integer> distinct = ConvertUtil.distinct(numList, t -> t);
+        System.out.println(distinct);
+
+        ArrayList<@Nullable Person> list = Lists.newArrayList();
+        list.add(new Person("i", 18, "杭州", 999.9));
+        list.add(new Person("am", 19, "温州", 777.7));
+        list.add(new Person("iron", 21, null, 888.8));
+        list.add(new Person("man", 17, "宁波", 888.8));
+        List<@Nullable Person> distinct1 = ConvertUtil.distinct(list, person -> person != null ? person.getAddress() : null);
+        System.out.println(distinct1);
 
     }
 }
