@@ -264,20 +264,35 @@ public class CommonTest {
         System.out.println(dayEnum3.getCode() + "=" + dayEnum3.getDesc());
     }
 
-@Test
+    @Test
     public void testThreadLocal() {
-    ThreadLocalMap.put("mainKey", new Person("i", 18, "杭州", 999.9));
+        ThreadLocalMap.put("mainKey", new Person("i", 18, "杭州", 999.9));
 
-    new Thread(()->{
-        ThreadLocalMap.put("threadKey", new Student(2,"thread",2));
+        new Thread(() -> {
+            ThreadLocalMap.put("threadKey", new Student(2, "thread", 2));
 
-        System.out.println("get main value in thread:" + ThreadLocalMap.get("mainKey"));
-        System.out.println("get thread value in thread:" + ThreadLocalMap.get("threadKey"));
-    }).start();
+            System.out.println("get main value in thread:" + ThreadLocalMap.get("mainKey"));
+            System.out.println("get thread value in thread:" + ThreadLocalMap.get("threadKey"));
+        }).start();
 
-    System.out.println("get thread value in main:" + ThreadLocalMap.get("threadKey"));
-    System.out.println("get main value in main:" + ThreadLocalMap.get("mainKey"));
+        System.out.println("get thread value in main:" + ThreadLocalMap.get("threadKey"));
+        System.out.println("get main value in main:" + ThreadLocalMap.get("mainKey"));
 
-}
+    }
+
+    @Test
+    public void stringTest(){
+        String a = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyYWYyYzk5MS1kYzBiLTQwNTktODliNC02OWYyYjJlZmJiOWEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MjYzNDAxLCJpYXQiOjE3MTc3Mjc0MDF9.6delKqVtyeA6sY6d23SsmiozaHYucL2YRBPxLwjNB3COUTbjcvt2KU1c-i5N-iI0HedJRJbG1b6QGSHcMe-J7w";
+        String b = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNTZiMjRmMS1hYTA1LTRlYjMtOGNhMy1jMGNkMmViMzE0ZjMiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MjY0MjA3LCJpYXQiOjE3MTc3MjgyMDd9.SCGYXn-I2qLf_WVtFqZztI3EM4qdTbsj_Njud400zDamy8B8S7MjEi8bwcTM1MYIoJJtK7Awu8M9az5s3fOXAA";
+        String c = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNDA0YWVlZC1lMjAwLTQ2N2QtOTQ5Ny1kYzkxMWRkMjg2ZTMiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MjY1NTMzLCJpYXQiOjE3MTc3Mjk1MzN9.mV5LirZC-3a6s3n4Rfp_NcHk4sFZh-xF-x9OlHvqJVIc_-QfMFyt_qiQOwcqAU8oBZeHapPXgsSNarfbidFbgw";
+        String d = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjNmY1MGNkNy05ODJhLTQ2OWUtOTY5OC05ODU3NjdiMTNmMDQiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MjgwODYxLCJpYXQiOjE3MTc3NDQ4NjF9.6vKmtiCoTbRocdqdjDlPze-QnYSTSmGr2DEkgyWjP-DF43GLdePcfxIbY8eLvIxCYBXjT5N-iXGJvYHNNZrUjg";
+        String e = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4YzE0NTYwMi05MTkyLTRkNGUtOGRkMi1iZWMwZTM1MDdlMmYiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MzUxMzE0LCJpYXQiOjE3MTc4MTUzMTR9.q64JhvP9EhFj5rFNHl-k-Yrpfq7D8GlZUh-mNmsoorUEI9xjqhySeuVsCVTBkkMrG_YwzR6erfBjtwZm0508MQ";
+        String f = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJlN2I1NWQwNC0xZGQzLTRjY2YtYTcyNy0yNWRjMjdjNGJiNTAiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MzUxNjg3LCJpYXQiOjE3MTc4MTU2ODd9.qZupx1ZTxF7-csru6t4bt9zIx5dFM3WyBpsgCPrMAptXl4AQbp55kJq9riuuPdu9IOyzur9vGaB4tH8J08VMFA";
+        String g = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIwZDBiMjRhOS1hMWM5LTQ4MTAtOThlYy00NTYzNmRiNmZjYmYiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MzUyNjUwLCJpYXQiOjE3MTc4MTY2NTB9.qRIrOP3FjOhGtyEi_5xX_nyHcKrAmXjPj9TXxh00GFoo8gq_0_Tb3wCzS9cQdM5w7fSEviHC1yr6Z8N8I0DSeQ";
+        String h = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjNmY1MGNkNy05ODJhLTQ2OWUtOTY5OC05ODU3NjdiMTNmMDQiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MzUyOTQwLCJpYXQiOjE3MTc4MTY5NDB9.ixAl7FFhA6CFawf_h6Jnh0Ho34JnMbueQErOIWoyZvBRNMscrSA7yoBbK7cpT0J1UVzCig8yaV2RqUht-rCW4g";
+
+        String join1 = StrUtil.join(",", a, b, c, d, e, f, g, h);
+        System.out.println(join1);
+    }
 
 }

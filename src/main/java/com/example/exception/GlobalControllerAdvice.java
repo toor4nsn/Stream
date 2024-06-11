@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.HandlerExceptionResolver;
+import sun.security.validator.ValidatorException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.List;
@@ -51,6 +53,22 @@ public class GlobalControllerAdvice {
         return ResultDTO.fail(e.getCode(), e.getMessage());
     }
 
+    /**
+     * GET散装参数校验
+     * ConstraintViolationException异常
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResultDTO handleConstraintViolationException(ConstraintViolationException e) {
+        log.warn("参数错误: {}", e.getMessage(), e);
+        // 一般只需返回泛化的错误信息，比如“参数错误”
+        return ResultDTO.fail(e.getLocalizedMessage());
+    }
+
+    /**
+     *POST参数校验：MethodArgumentNotValidException
+     * @param e
+     * @return
+     */
     @ResponseBody
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResultDTO handleNotValidException(MethodArgumentNotValidException e) {
@@ -92,6 +110,11 @@ public class GlobalControllerAdvice {
         return ResultDTO.fail(String.format("不支持%s请求方式", method));
     }
 
+    /**
+     * GET DTO参数校验：BindException
+     * @param e
+     * @return
+     */
     @ResponseBody
     @ExceptionHandler({BindException.class})
     public ResultDTO handleBindException(BindException e) {

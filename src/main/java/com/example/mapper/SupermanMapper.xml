@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.SupermanMapper">
+  <resultMap id="BaseResultMap" type="com.example.entity.Superman">
+    <!--@mbg.generated-->
+    <!--@Table t_superman-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="open" jdbcType="TINYINT" property="open" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, `open`, pid
+  </sql>
+</mapper>

@@ -1,6 +1,10 @@
 package com.example.controller;
 
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.config.CaffeineConfig;
 import com.example.dto.ResultDTO;
 import com.example.entity.JsonExample;
@@ -10,26 +14,22 @@ import com.example.mapper.JsonExampleMapper;
 import com.example.mapper.StudentMapper;
 import com.example.po.Result;
 import com.example.po.Student;
+import com.example.service.event.UserService;
 import com.example.util.RedisHandleService;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -162,4 +162,57 @@ public class DemoController {
         return ResultDTO.success(jsonExampleVO);
     }
 
+
+    @Autowired
+    private UserService userService;
+
+    //写一个用户登录Controller
+    @GetMapping("/login")
+    public ResultDTO login(@RequestParam String username) {
+        userService.loginUser(username);
+        return ResultDTO.success();
+    }
+
+
+
+
+    @PostMapping("/translate")
+    public  ResultDTO translate(@RequestBody List<String> list) {
+        Map<String, String> resultMap = new HashMap<>();
+        for (String item : list) {
+            String url = "https://deeplx.yelochick.com/translate";
+            String text = item;
+            String sourceLang = "ZH";
+            String targetLang = "EN";
+
+            // Create JSON payload
+            JSONObject jsonPayload = new JSONObject();
+            jsonPayload.put("text", text);
+            jsonPayload.put("source_lang", sourceLang);
+            jsonPayload.put("target_lang", targetLang);
+
+            // Execute POST request
+            HttpResponse response = HttpRequest.post(url)
+                    .header("Content-Type", "application/json")
+                    .body(jsonPayload.toString())
+                    .execute();
+
+            // Process response
+            JSONObject jsonObject = JSONObject.parseObject(response.body());
+            // Extract data field and create map
+
+            String dataField = jsonObject.getString("data");
+            resultMap.put(text, dataField);
+
+            // Print the result map
+            System.out.println(text + "===" + dataField);
+
+        }
+
+        return ResultDTO.success(resultMap);
+
+    }
 }
+
+
+

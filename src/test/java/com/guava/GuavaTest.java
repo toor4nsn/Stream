@@ -2,11 +2,9 @@ package com.guava;
 
 import com.example.po.Trader;
 import com.google.common.base.CharMatcher;
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.*;
-import com.stream.StreamTest;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.Test;

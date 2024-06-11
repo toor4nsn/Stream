@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.google.errorprone.annotations.Var;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.apache.commons.lang3.ObjectUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -153,5 +155,41 @@ public class StreamExercise {
         Collection<Person> collect = list.stream().collect(Collectors.collectingAndThen(Collectors.toMap(Person::getAddress, Function.identity(), (pre, next) -> next), Map::values));
         ArrayList<Person> res = Lists.newArrayList(collect);
         System.out.println(res);
+    }
+
+    @Test
+    public void distinctTest4(){
+        // 根据 name 字段去重
+        List<Person> uniquePersonsByName = new ArrayList<>(list.stream()
+                .collect(Collectors.toMap(
+                        Person::getName,  // 使用 name 作为键
+                        person -> person,  // 使用 Person 对象作为值
+                        (existing, replacement) -> existing  // 保留第一个出现的 Person 对象
+                ))
+                .values());
+        System.out.println(uniquePersonsByName);
+
+        //method2
+        List<Person> uniqueByName = list.stream()
+                .collect(Collectors.collectingAndThen(
+                        Collectors.toMap(
+                                Person::getName, // keyMapper
+                                Function.identity(), // valueMapper
+                                (existing, replacement) -> existing), // mergeFunction to handle duplicates
+                        map -> new ArrayList<>(map.values())
+                ));
+        System.out.println(uniqueByName);
+    }
+
+    @Test
+    public void toMapTest(){
+        Person a = new Person("i", 18, "杭州", 999.9);
+        Person b = new Person("nokia", 18, null, 999.9);
+        ArrayList<Person> var1 = Lists.newArrayList(a, b);
+        Map<String, String> collect = var1.stream().collect(Collectors.toMap(Person::getName, person -> person.getAddress()!=null?person.getAddress():"Unknown"));
+        System.out.println(collect);
+
+        String unknown = ObjectUtils.defaultIfNull(null, "Unknown");
+        System.out.println(unknown);
     }
 }
